@@ -1,0 +1,26 @@
+name: container-image
+
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            test1
+          flavor: |
+            latest=true
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value={{date 'YYYYMMDD.HHmmss'}}-{{sha}}
