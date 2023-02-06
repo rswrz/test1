@@ -15,10 +15,4 @@ jobs:
           ssh-key: ${{ secrets.COMMIT_KEY }}
 
       - name: Generate changelog
-        id: changelog
         uses: TriPSs/conventional-changelog-action@v3
-        with:
-          create-summary: true
-          output-file: false
-          skip-commit: true
-          skip-on-empty: false
