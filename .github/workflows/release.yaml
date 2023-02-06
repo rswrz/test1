@@ -14,5 +14,9 @@ jobs:
         with:
           ssh-key: ${{ secrets.COMMIT_KEY }}
 
+      - run: git remote -v
+      - run: git commit --allow-empty -m 'Empty commit'
+      - run: git push
+
       - name: Generate changelog
         uses: TriPSs/conventional-changelog-action@v3
