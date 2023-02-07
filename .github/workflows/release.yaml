@@ -17,7 +17,7 @@ jobs:
       - name: Generate changelog
         uses: TriPSs/conventional-changelog-action@v3
         with:
-          github-token: false
+          github-token: ""
           create-summary: true
           output-file: false
           skip-commit: true
