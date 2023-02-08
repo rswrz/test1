@@ -21,6 +21,7 @@ jobs:
           create-summary: true
           github-token: ${{ null }}
           output-file: false
+          skip-commit: true
           skip-on-empty: false
           skip-version-file: true
 
