@@ -3,8 +3,7 @@ name: release
 on:
   push:
     branches:
-      - release
-      - release/*
+      - main
 
 jobs:
   release:
@@ -21,5 +20,7 @@ jobs:
           create-summary: true
           github-token: ${{ null }}
           output-file: false
+          pre-release-identifier: alpha
+          pre-release: true
           skip-commit: true
           skip-on-empty: false
