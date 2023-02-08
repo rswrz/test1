@@ -1,10 +1,6 @@
 name: release
 
-on:
-  push:
-    branches:
-      - release
-      - release/*
+on: workflow_dispatch
 
 jobs:
   release:
@@ -20,12 +16,4 @@ jobs:
         with:
           create-summary: true
           github-token: ${{ null }}
-          skip-commit: true
-          skip-on-empty: false
           skip-version-file: true
-
-      - name: Push to main branch
-        run: git push origin ${{ github.ref_name }}:main
-
-      - name: Delete release branch
-        run: git push --delete origin ${{ github.ref_name }}
