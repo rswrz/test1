@@ -24,3 +24,4 @@ jobs:
           pre-release: true
           skip-commit: true
           skip-on-empty: false
+          skip-version-file: true
