@@ -19,6 +19,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           create-summary: true
+          git-branch: main
           github-token: ${{ null }}
           skip-on-empty: false
           skip-version-file: true
