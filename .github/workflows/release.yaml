@@ -23,3 +23,6 @@ jobs:
           output-file: false
           skip-commit: true
           skip-on-empty: false
+
+      - name: Delete release branch
+        run: git push --delete origin ${{ github.ref_name }}
