@@ -17,3 +17,4 @@ jobs:
           create-summary: true
           github-token: ${{ null }}
           skip-version-file: true
+          skip-ci: false
