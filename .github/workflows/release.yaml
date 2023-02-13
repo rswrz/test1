@@ -13,6 +13,7 @@ jobs:
 
       - name: Tag commit with semantic version
         uses: TriPSs/conventional-changelog-action@v3
+        id: changelog
         with:
           create-summary: true
           # Disable GITHUB_TOKEN authentication to be able
@@ -20,3 +21,13 @@ jobs:
           github-token: ${{ null }}
           skip-ci: false
           skip-version-file: true
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ null }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
