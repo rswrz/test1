@@ -28,3 +28,13 @@ jobs:
           skip-commit: true
           skip-on-empty: false
           skip-version-file: true
+
+      - name: Create GitHub pre-release
+        uses: ncipollo/release-action@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        with:
+          body: |
+            ${{ steps.changelog.outputs.clean_changelog }}
+          name: ${{ steps.changelog.outputs.tag }}
+          prerelease: true
+          tag: ${{ steps.changelog.outputs.tag }}
