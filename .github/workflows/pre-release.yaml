@@ -14,14 +14,15 @@ jobs:
         with:
           ssh-key: ${{ secrets.COMMIT_KEY }}
 
-      - name: Generate changelog
+      - name: Tag commit with semantic version
         uses: TriPSs/conventional-changelog-action@v3
         with:
           create-summary: true
+          # Disable GITHUB_TOKEN authentication to be able
+          # to use deploy key defined in `ssh-key` in actions/checkout
           github-token: ${{ null }}
           output-file: false
           pre-release-identifier: alpha
           pre-release: true
           skip-commit: true
-          skip-on-empty: false
           skip-version-file: true
