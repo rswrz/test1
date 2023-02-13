@@ -15,7 +15,8 @@ jobs:
         with:
           ssh-key: ${{ secrets.COMMIT_KEY }}
 
-      - name: Tag commit with semantic version
+      - id: changelog
+        name: Tag commit with semantic version
         uses: TriPSs/conventional-changelog-action@v3
         with:
           create-summary: true
