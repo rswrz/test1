@@ -18,5 +18,4 @@ jobs:
           # Disable GITHUB_TOKEN authentication to be able
           # to use deploy key defined in `ssh-key` in actions/checkout
           github-token: ${{ null }}
-          skip-commit: true
           skip-version-file: true
