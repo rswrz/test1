@@ -1,4 +1,4 @@
-name: Update image tags
+name: Update image tags (workflow dispatch)
 on:
   workflow_dispatch:
     inputs:

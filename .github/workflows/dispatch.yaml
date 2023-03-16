@@ -1,4 +1,4 @@
-name: Update image tags
+name: Update image tags (repo dispatch)
 on:
   repository_dispatch:
     types: [update-image-tags]
