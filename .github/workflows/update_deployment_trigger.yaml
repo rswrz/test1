@@ -1,4 +1,4 @@
-name: Trigger Repository Dispatch
+name: Update image tags trigger
 
 on:
   workflow_dispatch:
