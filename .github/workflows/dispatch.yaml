@@ -1,0 +1,19 @@
+name: Update image tags
+on:
+  repository_dispatch:
+    types: [update-image-tags]
+
+jobs:
+  update-deployment-image-tag:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mikefarah/yq@master
+        with:
+          cmd: yq -i '.spec.template.spec.containers.0.image = "app:${{ github.event.client_payload.image_tag }}"' deployment.yaml
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update image tags through GitHub action
+          file_pattern: deployment.yaml
