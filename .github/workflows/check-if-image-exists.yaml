@@ -1,0 +1,16 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: The image with optional tag to check
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        run: docker manifest inspect ${{ github.event.inputs.image }}
