@@ -1,0 +1,28 @@
+name: Update image tags
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - testing
+          - staging
+          - production
+        description: The environment to be updated
+        required: true
+      image_tag:
+        description: The container image tag to set
+
+jobs:
+  update-deployment-image-tag:
+    env: {}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mikefarah/yq@master
+        with:
+          cmd: yq -i '.spec.template.spec.containers.0.image = "app:${{ github.event.inputs.image_tag }}"' deployment.yaml
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update image tags through GitHub action
+          file_pattern: deployment.yaml
