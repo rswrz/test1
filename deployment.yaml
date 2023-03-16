@@ -7,4 +7,4 @@ spec:
     spec:
       containers:
         - name: app
-          image: app:v3
+          image: app:v4
