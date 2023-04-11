@@ -25,7 +25,7 @@ jobs:
           release_version=${GITHUB_REF_NAME##*/}
           latest_existing_hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev)
           if [ -n "$latest_existing_hotfix_version" ]; then
-            hotfix_version=$latest_existing_hotfix_version
+            hotfix_version=$(expr 1 + "$latest_existing_hotfix_version")
           else
             hotfix_version=0
           fi
