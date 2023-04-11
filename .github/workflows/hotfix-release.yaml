@@ -21,8 +21,9 @@ jobs:
         id: hotfix
         run: |
           set -e
-
           release_version=${GITHUB_REF_NAME##*/}
+
+          git fetch --tags
           latest_existing_hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev)
           if [ -n "$latest_existing_hotfix_version" ]; then
             hotfix_version=$(expr 1 + "$latest_existing_hotfix_version")
