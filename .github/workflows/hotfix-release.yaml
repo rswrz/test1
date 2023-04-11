@@ -20,6 +20,8 @@ jobs:
       - name: tag hotfix
         id: hotfix
         run: |
+          set -e
+
           release_version=${GITHUB_REF_NAME##*/}
           latest_existing_hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev)
           if [ -n "$latest_existing_hotfix_version" ]; then
@@ -28,7 +30,7 @@ jobs:
             hotfix_version=0
           fi
 
-          tag=${release_version}+hotfix.${hotfix_version}"
+          tag="${release_version}+hotfix.${hotfix_version}"
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git tag -a "${tag}" -m "${tag}"
