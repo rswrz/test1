@@ -21,7 +21,12 @@ jobs:
         id: hotfix
         run: |
           release_version=${GITHUB_REF_NAME##*/}
-          hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev | xargs expr 1 + | grep "[[:digit:]]*" || echo 0)
+          latest_existing_hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev)
+          if [ -n "$latest_existing_hotfix_version" ]; then
+            hotfix_version=$latest_existing_hotfix_version
+          else
+            hotfix_version=0
+          fi
           echo "tag=$hotfix_version" >> $GITHUB_OUTPUT
 
       - uses: actions-ecosystem/action-push-tag@v1
