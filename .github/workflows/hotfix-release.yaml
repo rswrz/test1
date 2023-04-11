@@ -1,0 +1,30 @@
+name: hotfix-release
+
+on:
+  push:
+    branches:
+      - hotfix/*
+
+jobs:
+  hotfix-release:
+    if: ${{ !startsWith(github.event.head_commit.message, 'chore(release):') }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.COMMIT_KEY }}
+
+      - name: tag hotfix
+        id: hotfix
+        run: |
+          release_version=${GITHUB_REF_NAME##*/}
+          hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev | xargs expr 1 + | grep "[[:digit:]]*" || echo 0)
+          echo "tag=$hotfix_version" >> $GITHUB_OUTPUT
+
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.hotfix.outputs.tag }}
+          message: ${{ steps.hotfix.outputs.tag }}
