@@ -1,0 +1,36 @@
+name: release-hotfix
+
+on: workflow_dispatch
+
+jobs:
+  release-hotfix:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.COMMIT_KEY }}
+
+      - id: changelog
+        name: Tag commit with semantic version
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          create-summary: true
+          # Disable GITHUB_TOKEN authentication to be able
+          # to use deploy key defined in `ssh-key` in actions/checkout
+          github-token: ${{ null }}
+          skip-ci: false
+          skip-version-file: true
+          skip-tag: true
+          skip-commit: true
+
+      # - name: Create GitHub release
+      #   uses: ncipollo/release-action@v1
+      #   if: ${{ steps.changelog.outputs.skipped == 'false' }}
+      #   with:
+      #     body: |
+      #       ${{ steps.changelog.outputs.clean_changelog }}
+      #     name: ${{ steps.changelog.outputs.tag }}
+      #     tag: ${{ steps.changelog.outputs.tag }}
