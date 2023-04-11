@@ -32,8 +32,6 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=raw,value={{date 'YYYYMMDD.HHmmss'}}-{{sha}}
-            type=match,pattern=v(\d.\d.\d\+hotfix\.\d)
-            type=match,pattern=v(\d.\d.\d\hotfix.\d)
 
       - name: Set Docker metadata (hotfix)
         if: steps.check-hotfix.outputs.release-type == 'hotfix'
