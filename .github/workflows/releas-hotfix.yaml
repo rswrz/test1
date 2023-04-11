@@ -25,6 +25,7 @@ jobs:
           skip-version-file: true
           skip-tag: true
           skip-commit: true
+          git-push: false
 
       # - name: Create GitHub release
       #   uses: ncipollo/release-action@v1
