@@ -13,7 +13,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ssh-key: ${{ secrets.COMMIT_KEY }}
-          fetch-depth: 0
 
       - name: tag hotfix
         id: hotfix
@@ -44,9 +43,18 @@ jobs:
             exit 1
           fi
 
+          # Create Git tag and push it to origin
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git tag -a "${tag}" -m "${tag}"
+          git push origin "${tag}"
+
           echo "tag=$new_tag" >> $GITHUB_OUTPUT
 
-      - uses: actions-ecosystem/action-push-tag@v1
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
         with:
+          body: |
+            Hotfix ${{ steps.hotfix.outputs.tag }}
+          name: ${{ steps.hotfix.outputs.tag }}
           tag: ${{ steps.hotfix.outputs.tag }}
-          message: ${{ steps.hotfix.outputs.tag }}
