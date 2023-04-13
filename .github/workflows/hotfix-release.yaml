@@ -20,7 +20,9 @@ jobs:
         run: |
           set -ex
 
+          # Fetch forcefully all tags
           git fetch --force --tags
+
           latest_tag=$(
             git describe --abbrev=0 --match "v*.*.*+hotfix.*" 2>/dev/null ||
             git describe --abbrev=0 --match "v*.*.*" 2>/dev/null ||
@@ -39,6 +41,7 @@ jobs:
             new_tag=${latest_tag%.*}.${new_hotfix_version}
           fi
 
+          # Exit with error of not new tag is generated
           if [ -z "${new_tag}" ]; then
             echo Failed to calculate new version tag.
             exit 1
@@ -47,9 +50,10 @@ jobs:
           # Create Git tag and push it to origin
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git tag -a "${tag}" -m "${tag}"
-          git push origin "${tag}"
+          git tag -a "${new_tag}" -m "${new_tag}"
+          git push origin "${new_tag}"
 
+          # Set GitHub output
           echo "tag=$new_tag" >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
