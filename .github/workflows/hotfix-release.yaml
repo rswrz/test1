@@ -20,6 +20,7 @@ jobs:
         run: |
           set -ex
 
+          git fetch --force --tags
           latest_tag=$(
             git describe --abbrev=0 --match "v*.*.*+hotfix.*" 2>/dev/null ||
             git describe --abbrev=0 --match "v*.*.*" 2>/dev/null ||
