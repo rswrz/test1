@@ -7,9 +7,6 @@ on:
 
 jobs:
   hotfix-release:
-    if: ${{ !startsWith(github.event.head_commit.message, 'chore(release):') }}
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -20,9 +17,32 @@ jobs:
       - name: tag hotfix
         id: hotfix
         run: |
-          release_version=${GITHUB_REF_NAME##*/}
-          hotfix_version=$(git tag -l "${release_version}+hotfix.*" --sort='-version:refname' | head -n1 | rev | cut -d. -f1 | rev | xargs expr 1 + | grep "[[:digit:]]*" || echo 0)
-          echo "tag=$hotfix_version" >> $GITHUB_OUTPUT
+          set -ex
+                    
+          latest_tag=$(
+            git describe --abbrev=0 --match "v*.*.*+hotfix.*" 2>/dev/null ||
+            git describe --abbrev=0 --match "v*.*.*" 2>/dev/null ||
+            true
+          )
+
+          # Latest tag is a production release. New tag will be the first hotfix release
+          if echo "$latest_tag" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]$'; then
+            new_tag=${latest_tag}+hotfix.0
+          fi
+
+          # Latest tag is a hotfix release. New tag will be the incremented hotfix release
+          if echo "$latest_tag" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]\+hotfix.[0-9]+$'; then
+            latest_hotfix_version=$(echo "$latest_tag" | rev | cut -d. -f1 | rev)
+            new_hotfix_version=$(($latest_hotfix_version + 1))
+            new_tag=${latest_tag%.*}.${new_hotfix_version}
+          fi
+
+          if [ -z "${new_tag}" ]; then
+            echo Failed to calculate new version tag.
+            exit 1
+          fi
+
+          echo "tag=$new_tag" >> $GITHUB_OUTPUT
 
       - uses: actions-ecosystem/action-push-tag@v1
         with:
