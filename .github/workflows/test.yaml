@@ -1,0 +1,14 @@
+name: test
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      test: test123
+      test123: ~
+    steps:
+      - name: test
+        run: |
+          echo $test
