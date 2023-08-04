@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       test: test123
-      test123: ~
+      test123: ""
     steps:
       - name: test
         run: |
